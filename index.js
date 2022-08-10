@@ -1,15 +1,14 @@
 // TODO: Include packages needed for this application
 const inquirer = require('inquirer');
 const fs = require('fs');
-const makeReadme = require('./src/page-template');
-const {writeFile} = require('./utils/generate-page');
+const { makeReadme } = require('./src/page-template');
 
 // TODO: Create an array of questions for user input
 const userQuestions = () => { 
     return inquirer.prompt([
     {
         type: 'input',
-        name: 'GitHub name',
+        name: 'GitHubname',
         message: 'What is your GitHub username? (Required)',
         validate: nameInput => {
             if(nameInput) {
@@ -22,7 +21,7 @@ const userQuestions = () => {
     },
     {
         type: 'input',
-        name: 'Email',
+        name: 'email',
         message: 'What is your email? (Required)',
         validate: emailInput => {
             if(emailInput) {
@@ -32,86 +31,68 @@ const userQuestions = () => {
                 return false;
             }
         }
-    }
-])};
-
-const projectQuestions = readmeData => {
-    if(!readmeData.projects) {
-        readmeData.projects = [];
-    }
-    return inquirer.prompt([
-        {
-            type: 'input',
-            name: 'Project title',
-            message: 'What is the title of your project? (Required)',
-            validate: projectTitle => {
-                if(projectTitle) {
-                    return true;
-                } else {
-                    console.log('Projects must have a name!');
-                    return false;
-                }
+    },
+    {
+        type: 'input',
+        name: 'title',
+        message: 'What is the title of your project? (Required)',
+        validate: projectTitle => {
+            if(projectTitle) {
+                return true;
+            } else {
+                console.log('Projects must have a name!');
+                return false;
             }
-        },
-        {
-            type: 'input',
-            name: 'description',
-            message: 'Provide a description of your project:',
-            validate: descriptionProject => {
-                if (descriptionProject) {
-                    return true;
-                }
-            }
-        },
-        {
-            type
-        },
-        {
-            type: 'input',
-            name: 'Contributors',
-            message: 'List all contributors to your project'
-        },
-        {
-            type: 'input',
-            name: 'Installation',
-            message: 'Provide instructions on how to clone/install your project',
-            validate: inStall => {
-                if(inStall) {
-                    return true;
-                } else {
-                    console.log('Must include directions on how to download your project!');
-                    return false;
-                }
-            }
-        },
-        {
-            type: 'checkbox',
-            name: 'license',
-            message: 'Please choose from one of the licenses below',
-            choices: ['Apache_2.0', 'MIT', 'ISC']
-        },
-        {
-            type: 'confirm',
-            name: 'confirmProject',
-            message: 'Create README?',
-            default: false
         }
-    ])
-    .then(projectInfo => {
-        readmeData.projects.push(projectInfo);
-        if(projectInfo.confirmProject) {
-            return readmeData;
-        } else {
-            return false;
+    },
+    {
+        type: 'input',
+        name: 'description',
+        message: 'Provide a description of your project:',
+        validate: descriptionProject => {
+            if (descriptionProject) {
+                return true;
+            }
         }
-    })
+    },
+    {
+        type: 'input',
+        name: 'contributors',
+        message: 'List all contributors to your project'
+    },
+    {
+        type: 'input',
+        name: 'installation',
+        message: 'Provide instructions on how to clone/install your project',
+        validate: inStall => {
+            if(inStall) {
+                return true;
+            } else {
+                console.log('Must include directions on how to download your project!');
+                return false;
+            }
+        }
+    },
+    {
+        type: 'checkbox',
+        name: 'license',
+        message: 'Please choose from one of the licenses below',
+        choices: ['Apache_2.0', 'MIT', 'ISC']
+    },
+    {
+        type: 'confirm',
+        name: 'confirmProject',
+        message: 'Create README?',
+        default: false,
+        validate: yesorNo => {
+            if(yesorNo) {
+                return userQuestions;
+            } else {
+                console.log(err);
+            }
+        }
+    }
+])
 };
 
-userQuestions()
-.then(projectQuestions)
-.then(readmeData => {
-    return makeReadme(readmeData)
-.then(templatePage => {
-    return writeFile(templatePage);
-});
-});
+userQuestions().then(makeReadme(userQuestions));
