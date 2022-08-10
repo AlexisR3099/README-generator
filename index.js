@@ -2,6 +2,7 @@
 const inquirer = require('inquirer');
 const fs = require('fs');
 const makeReadme = require('./src/page-template');
+const {writeFile} = require('./utils/generate-page');
 
 // TODO: Create an array of questions for user input
 const userQuestions = () => { 
@@ -88,8 +89,29 @@ const projectQuestions = readmeData => {
             name: 'license',
             message: 'Please choose from one of the licenses below',
             choices: ['Apache_2.0', 'MIT', 'ISC']
+        },
+        {
+            type: 'confirm',
+            name: 'confirmProject',
+            message: 'Create README?',
+            default: false
         }
     ])
+    .then(projectInfo => {
+        readmeData.projects.push(projectInfo);
+        if(projectInfo.confirmProject) {
+            return readmeData;
+        } else {
+            return false;
+        }
+    })
 };
 
-userQuestions().then(projectQuestions);
+userQuestions()
+.then(projectQuestions)
+.then(readmeData => {
+    return makeReadme(readmeData)
+.then(templatePage => {
+    return writeFile(templatePage);
+});
+});
