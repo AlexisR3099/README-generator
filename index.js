@@ -1,6 +1,7 @@
 // TODO: Include packages needed for this application
 const inquirer = require('inquirer');
 const fs = require('fs');
+const makeReadme = require('./src/page-template');
 
 // TODO: Create an array of questions for user input
 const userQuestions = () => { 
@@ -30,12 +31,12 @@ const userQuestions = () => {
                 return false;
             }
         }
-    },
+    }
 ])};
 
 const projectQuestions = readmeData => {
-    if(!readmeData.data) {
-        readmeData.data = [];
+    if(!readmeData.projects) {
+        readmeData.projects = [];
     }
     return inquirer.prompt([
         {
@@ -50,8 +51,45 @@ const projectQuestions = readmeData => {
                     return false;
                 }
             }
+        },
+        {
+            type: 'input',
+            name: 'description',
+            message: 'Provide a description of your project:',
+            validate: descriptionProject => {
+                if (descriptionProject) {
+                    return true;
+                }
+            }
+        },
+        {
+            type
+        },
+        {
+            type: 'input',
+            name: 'Contributors',
+            message: 'List all contributors to your project'
+        },
+        {
+            type: 'input',
+            name: 'Installation',
+            message: 'Provide instructions on how to clone/install your project',
+            validate: inStall => {
+                if(inStall) {
+                    return true;
+                } else {
+                    console.log('Must include directions on how to download your project!');
+                    return false;
+                }
+            }
+        },
+        {
+            type: 'checkbox',
+            name: 'license',
+            message: 'Please choose from one of the licenses below',
+            choices: ['Apache_2.0', 'MIT', 'ISC']
         }
     ])
-}
+};
 
-//questions();
+userQuestions().then(projectQuestions);
