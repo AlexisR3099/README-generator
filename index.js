@@ -1,7 +1,7 @@
 // TODO: Include packages needed for this application
 const inquirer = require('inquirer');
 const fs = require('fs');
-const { makeReadme } = require('./src/page-template');
+const { makeReadme, formatAnswers } = require('./src/page-template');
 
 // TODO: Create an array of questions for user input
 const userQuestions = () => { 
@@ -95,4 +95,13 @@ const userQuestions = () => {
 ])
 };
 
-userQuestions().then(makeReadme(userQuestions));
+userQuestions()
+.then(userQuestions => {
+    userQuestions.GitHubname = formatAnswers(userQuestions.GitHubname);
+    userQuestions.email = formatAnswers(userQuestions.email);
+    userQuestions.title = formatAnswers(userQuestions.title);
+    userQuestions.description = formatAnswers(userQuestions.description);
+    userQuestions.contributors = formatAnswers(userQuestions.contributors);
+    userQuestions.installation = formatAnswers(userQuestions.installation);
+    makeReadme(userQuestions);
+});

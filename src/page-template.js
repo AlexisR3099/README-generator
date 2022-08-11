@@ -1,5 +1,10 @@
 const fs = require('fs');
 
+const formatAnswers = object => {
+    newAnswers = JSON.stringify(object);
+    return object;
+};
+
 // write read.me
 const makeReadme = answers => {
 
@@ -43,4 +48,4 @@ return new Promise((resolve, reject) => {
 });
 };
 
-module.exports = { makeReadme };
+module.exports = { makeReadme, formatAnswers };
