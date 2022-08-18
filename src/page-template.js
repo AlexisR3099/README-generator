@@ -5,6 +5,19 @@ const formatAnswers = object => {
     return object;
 };
 
+const getTag = (string) => {
+    let x = string
+    switch(x) {
+        case "Apache_2.0":
+            string = "[![License](https://img.shileds.io/badge/License-Apache_2.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)";
+            break;
+        case "MIT":
+            string = "[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)";
+    }
+    object = [x, string];
+    return object;
+}
+
 // write read.me
 const makeReadme = answers => {
 
@@ -48,4 +61,4 @@ return new Promise((resolve, reject) => {
 });
 };
 
-module.exports = { makeReadme, formatAnswers };
+module.exports = { makeReadme, formatAnswers, getTag };

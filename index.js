@@ -1,7 +1,7 @@
 // TODO: Include packages needed for this application
 const inquirer = require('inquirer');
 const fs = require('fs');
-const { makeReadme, formatAnswers } = require('./src/page-template');
+const { makeReadme, formatAnswers, getTag } = require('./src/page-template');
 
 // TODO: Create an array of questions for user input
 const userQuestions = () => { 
@@ -103,5 +103,7 @@ userQuestions()
     userQuestions.description = formatAnswers(userQuestions.description);
     userQuestions.contributors = formatAnswers(userQuestions.contributors);
     userQuestions.installation = formatAnswers(userQuestions.installation);
+    let [license] = userQuestions.license;
+    userQuestions.license = getTag(license);
     makeReadme(userQuestions);
 });
